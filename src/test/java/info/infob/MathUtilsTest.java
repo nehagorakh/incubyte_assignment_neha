@@ -46,7 +46,7 @@ class MathUtilsTest {
 	
 	@Test
 	void testForChangeDelimeterAndNumbers() throws Exception {
-		assertEquals(5, stringCalC.add("//*\n1;2"), 
+		assertEquals(8, stringCalC.add("//*\n1*2\n5"), 
 				"delimeter should be changed");
 	}
 
