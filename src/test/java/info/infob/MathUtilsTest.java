@@ -76,8 +76,14 @@ class MathUtilsTest {
 	}
 	
 	@Test
-	void testForNegativeNumbers() throws Exception {
+	void testForNegativeNumbersAndMultipleMultiCharacterDelimeter() throws Exception {
 		assertEquals(6, stringCalC.add("//[**][%%]\\n1**-2%%-3"), 
+				"it should negative numbers not allowed exception");
+	}
+	
+	@Test
+	void testForNegativeNumbers() throws Exception {
+		assertEquals(6, stringCalC.add("1;-2;-3;-7"), 
 				"it should negative numbers not allowed exception");
 	}
 		
