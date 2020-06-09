@@ -8,27 +8,25 @@ public class StringCalculator {
 	
 	private String defaultDelimeter = ";|\n";
 	
-	private int addInvokingMethodCount =0;
+	private static int addInvokingMethodCount =0;
 	
 	
 	
 	public int add(String numbers) throws Exception {
 	
-		this.addInvokingMethodCount++;
+		String[] numbersArray;
+		addInvokingMethodCount++;
 		String[] multiDelimeter = null;
 		if(numbers.isEmpty())
 			return 0;
 		
+		if(numbers.startsWith("\n") && numbers.startsWith("\n"))
+			throw new Exception(" Invalid Input ");
+		
 		//no need to change delimeter, use default delimeter
-		if(!numbers.startsWith("//")) {			
-			if(numbers.startsWith("\n") && numbers.startsWith("\n"))
-				throw new Exception(" Invalid Input ");
-				
-			String[] numbersArray = numbers.split(this.defaultDelimeter);
-									
-			return getSum(Arrays.asList(numbersArray));
-			
-		}
+		if(!numbers.startsWith("//")) 		
+			numbersArray = numbers.split(this.defaultDelimeter);
+										
 		//here we need to have provided delimeter for getting numbers array
 		else {
 			String[] sepratDelimeterAndNumbers = numbers.split("\n", 2);
@@ -42,34 +40,30 @@ public class StringCalculator {
 						continue;
 					delimeter += delim.replaceAll("]", "")+"|";
 				}
+				
 				delimeter += "\n]";		
 			}
 			else
 			//for meta characters we need to add '\\' before delimeter
-			delimeter = "\\"+delimeter+"|\n";
-			
-			List<String> numbersArray = Arrays.asList(sepratDelimeterAndNumbers[1].split(delimeter));
-			return getSum(numbersArray);								
+			delimeter = "\\"+delimeter+"|\n";			
+			numbersArray = sepratDelimeterAndNumbers[1].split(delimeter);
 		}
+		List<String> numberList = Arrays.asList(numbersArray);
+		
+		numberList = numberList.stream().filter(a-> (!a.equalsIgnoreCase("") && !(Integer.parseInt(a) > 1000))).collect(Collectors.toList());
+		
+		List<String> negativeNumbers = numberList.stream().filter(a-> Integer.parseInt(a) < 0).collect(Collectors.toList());
+		
+		if(negativeNumbers!=null && negativeNumbers.size() > 0)
+			throw new Exception("Negative Numbers are not allowed : "+negativeNumbers);	
+		return numberList.stream()
+				  .mapToInt(x -> Integer.parseInt(x))
+				  .sum();
 	}
 	
 	
 	public int GetCalledCount() {
-		return this.addInvokingMethodCount;
+		return addInvokingMethodCount;
 		
-	}
-	
-	public int getSum(List<String> numbersArray) throws Exception {
-		int sum =0;
-		for(String i : numbersArray) {
-			if(i.equalsIgnoreCase(""))
-				continue;
-			if(Integer.parseInt(i) < 0 )					
-				throw new Exception(" negatives not allowed  : " +numbersArray.stream().filter(a->(!a.equalsIgnoreCase("") && Integer.parseInt(a) < 0)).collect(Collectors.toList()));
-				
-			if(Integer.parseInt(i) <= 1000)
-				sum += Integer.parseInt(i);
-		}
-		return sum;
 	}
 }

@@ -91,5 +91,9 @@ class MathUtilsTest {
 		assertEquals(6, stringCalC.add("1;-2;-3;-7"), 
 				"it should negative numbers not allowed exception");
 	}
-		
+	@Test
+	void testForCountMethodCalls() throws Exception {
+		assertEquals(13, stringCalC.GetCalledCount(), 
+				"Wrong count");
+	}
 }
