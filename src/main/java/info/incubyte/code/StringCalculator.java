@@ -1,7 +1,7 @@
 package info.incubyte.code;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class StringCalculator {
@@ -15,7 +15,7 @@ public class StringCalculator {
 	public int add(String numbers) throws Exception {
 	
 		this.addInvokingMethodCount++;
-		
+		String[] multiDelimeter = null;
 		if(numbers.isEmpty())
 			return 0;
 		
@@ -26,7 +26,7 @@ public class StringCalculator {
 				
 			String[] numbersArray = numbers.split(this.defaultDelimeter);
 									
-			return getSum(numbersArray);
+			return getSum(Arrays.asList(numbersArray));
 			
 		}
 		//here we need to have provided delimeter for getting numbers array
@@ -34,10 +34,21 @@ public class StringCalculator {
 			String[] sepratDelimeterAndNumbers = numbers.split("\n", 2);
 			String delimeter = sepratDelimeterAndNumbers[0].substring(2);
 			
+			if(delimeter.contains("[")) {
+				multiDelimeter = delimeter.split("\\[");
+				delimeter = "[";
+				for(String delim : multiDelimeter) {
+					if(delim.equalsIgnoreCase(""))
+						continue;
+					delimeter += delim.replaceAll("]", "")+"|";
+				}
+				delimeter += "\n]";		
+			}
+			else
 			//for meta characters we need to add '\\' before delimeter
-			delimeter = "\\"+delimeter;
+			delimeter = "\\"+delimeter+"|\n";
 			
-			String[] numbersArray = sepratDelimeterAndNumbers[1].split(delimeter+"|\n");
+			List<String> numbersArray = Arrays.asList(sepratDelimeterAndNumbers[1].split(delimeter));
 			return getSum(numbersArray);								
 		}
 	}
@@ -48,23 +59,17 @@ public class StringCalculator {
 		
 	}
 	
-	public int getSum(String[] numbersArray) throws Exception {
+	public int getSum(List<String> numbersArray) throws Exception {
 		int sum =0;
 		for(String i : numbersArray) {
-			
+			if(i.equalsIgnoreCase(""))
+				continue;
 			if(Integer.parseInt(i) < 0 )					
-				throw new Exception(" negatives not allowed  : " +Arrays.stream(numbersArray).filter(a->Integer.parseInt(a) < 0).collect(Collectors.toList()));
+				throw new Exception(" negatives not allowed  : " +numbersArray.stream().filter(a->(!a.equalsIgnoreCase("") && Integer.parseInt(a) < 0)).collect(Collectors.toList()));
 				
 			if(Integer.parseInt(i) <= 1000)
 				sum += Integer.parseInt(i);
 		}
 		return sum;
 	}
-	
-   public static void main(String[] args) throws Exception {
-	   System.out.println(new StringCalculator().add("//*\n1*2"));
-	   
-   }
-	
-
 }

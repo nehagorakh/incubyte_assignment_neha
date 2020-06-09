@@ -58,26 +58,31 @@ class MathUtilsTest {
 	
 	@Test
 	void testForMultiLengthDelimeter() throws Exception {
-		assertEquals(6, stringCalC.add("//[***]\\n1***2***3"), 
+		assertEquals(6, stringCalC.add("//[***]\n1***2***3"), 
 				"delimeter should be changed");
 	}
 	
 	@Test
 	void testForMultipleDelimeter() throws Exception {
-		assertEquals(6, stringCalC.add("//[*][%]\\n1*2%3"), 
+		assertEquals(6, stringCalC.add("//[*][%]\n1*2%3"), 
 				"delimeter should be changed");
 	}
 	
 	
 	@Test
 	void testForMultipleDelimeterLengthWithMultiChar() throws Exception {
-		assertEquals(6, stringCalC.add("//[**][%%]\\n1**2%%3"), 
+		assertEquals(6, stringCalC.add("//[**][%%]\n1**2%%3"), 
 				"delimeter should be changed");
 	}
 	
 	@Test
+	void testMultipleMultiCharacterDelimeter() throws Exception {
+		assertEquals(6, stringCalC.add("//[**][%%]\n1**2%%3"), 
+				"it should negative numbers not allowed exception");
+	}
+	@Test
 	void testForNegativeNumbersAndMultipleMultiCharacterDelimeter() throws Exception {
-		assertEquals(6, stringCalC.add("//[**][%%]\\n1**-2%%-3"), 
+		assertEquals(6, stringCalC.add("//[**][%%]\n1**-2%%3"), 
 				"it should negative numbers not allowed exception");
 	}
 	
